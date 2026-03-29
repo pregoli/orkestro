@@ -1,0 +1,78 @@
+name: my-workflow
+version: "1.0.0"
+description: >
+  Describe what this workflow does.
+
+input:
+  - name: requirement
+    type: string
+    required: true
+    description: Describe the input.
+
+# defaults:
+#   timeout: 300s
+#   retry:
+#     max: 2
+#     on_exceeded: stop
+
+# safety:
+#   blocked_commands:
+#     - "rm -rf"
+#     - "git push --force"
+#   blocked_files:
+#     - ".env"
+
+phases:
+  plan:
+    description: Create an implementation plan.
+    agent: planner
+    prompt: |
+      {{ input.requirement }}
+
+  review_plan:
+    description: Human approves or rejects the plan.
+    depends_on: [plan]
+    gate:
+      type: human_approval
+      actions:
+        approve: proceed
+        reject: stop
+
+  # These two phases share the same depends_on and both have parallel: true,
+  # so they run concurrently within the same wave.
+  implement_backend:
+    description: Implement backend changes.
+    agent: developer
+    depends_on: [review_plan]
+    parallel: true                    # Runs at the same time as implement_frontend
+    context:
+      from_phase: plan
+    retry:
+      max: 2
+      on: failure
+      on_exceeded: stop
+
+  implement_frontend:
+    description: Implement frontend changes.
+    agent: developer
+    depends_on: [review_plan]
+    parallel: true                    # Runs at the same time as implement_backend
+    context:
+      from_phase: plan
+    retry:
+      max: 2
+      on: failure
+      on_exceeded: stop
+
+  review_code:
+    description: Review the full implementation.
+    agent: reviewer
+    depends_on: [implement_backend, implement_frontend]
+    context:
+      from_phase: implement_backend   # Can reference either or both
+    gate:
+      type: agent_verdict
+      field: verdict
+      actions:
+        APPROVE: proceed
+        REQUEST_CHANGES: goto:implement_backend

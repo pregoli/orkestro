@@ -1,0 +1,85 @@
+name: plan-implement-review
+version: "1.0.0"
+description: >
+  Plan a feature, get human approval, implement it, review the code.
+  Uses the starter agents (planner, developer, reviewer) and their skills.
+
+input:
+  - name: requirement
+    type: string
+    required: true
+    description: The feature, bug fix, or task to implement.
+
+defaults:
+  timeout: 300s
+
+safety:
+  blocked_commands:
+    - "rm -rf"
+    - "rm -r"
+    - "git push --force"
+    - "git reset --hard"
+    - "git clean -f"
+  blocked_files:
+    - ".env"
+    - "credentials.json"
+
+phases:
+  plan:
+    description: Create a sequenced implementation plan.
+    agent: planner
+    prompt: |
+      {{ input.requirement }}
+
+  review_plan:
+    description: Human approves, requests changes, or rejects the plan.
+    depends_on: [plan]
+    gate:
+      type: human_approval
+      actions:
+        approve: proceed
+        request_changes: goto:plan
+        reject: stop
+    retry:
+      max: 1
+      on: request_changes
+      on_exceeded: stop
+
+  implement:
+    description: Implement the plan — build and test must pass.
+    agent: developer
+    depends_on: [review_plan]
+    context:
+      from_phase: plan
+      compaction: none
+    retry:
+      max: 2
+      on: failure
+      on_exceeded: stop
+
+  review_code:
+    description: Review the implementation diff.
+    agent: reviewer
+    depends_on: [implement]
+    context:
+      from_phase: implement
+      compaction: none
+    gate:
+      type: agent_verdict
+      field: verdict
+      actions:
+        APPROVE: proceed
+        REQUEST_CHANGES: goto:fix
+
+  fix:
+    description: Fix review findings and re-review.
+    agent: developer
+    context:
+      from_phase: review_code
+      compaction: custom
+      compaction_prompt: Extract only the blocker and warning findings.
+    on_complete: goto:review_code
+    retry:
+      max: 3
+      on: REQUEST_CHANGES
+      on_exceeded: stop

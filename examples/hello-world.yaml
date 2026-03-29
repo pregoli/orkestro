@@ -1,0 +1,24 @@
+name: hello-world
+version: "0.1.0"
+description: Minimal workflow to test the CLI engine.
+
+input:
+  - name: topic
+    type: string
+    required: true
+
+phases:
+  generate:
+    description: Write a short paragraph about the topic.
+    prompt: |
+      Write a single short paragraph (3 sentences max) about:
+      {{ input.topic }}
+
+  review:
+    description: Human approves or rejects the paragraph.
+    depends_on: [generate]
+    gate:
+      type: human_approval
+      actions:
+        approve: proceed
+        reject: stop

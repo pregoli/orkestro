@@ -1,15 +1,18 @@
 <p align="center">
-  <h1 align="center">Orkestro</h1>
-  <p align="center">
-    <strong>Vendor-agnostic multi-agent workflow orchestration.</strong><br>
-    Define the workflow. Run it in whatever tool you already use.
-  </p>
-  <p align="center">
-    <a href="https://github.com/paoloregoli/orkestro/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
-    <a href="#"><img src="https://img.shields.io/badge/version-0.1.0-green.svg" alt="Version"></a>
-    <a href="#"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
-    <a href="#"><img src="https://img.shields.io/badge/no_dependencies-none-orange.svg" alt="No Dependencies"></a>
-  </p>
+  <a href="#"><img src="assets/logo-light.svg#gh-light-mode-only" alt="Orkestro" width="360"></a>
+  <a href="#"><img src="assets/logo-dark.svg#gh-dark-mode-only" alt="Orkestro" width="360"></a>
+</p>
+
+<p align="center">
+  <strong>Vendor-agnostic multi-agent workflow orchestration.</strong><br>
+  Define the workflow. Run it in whatever tool you already use.
+</p>
+
+<p align="center">
+  <a href="https://github.com/paoloregoli/orkestro/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
+  <a href="#"><img src="https://img.shields.io/badge/version-0.1.0-green.svg" alt="Version"></a>
+  <a href="#"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+  <a href="#"><img src="https://img.shields.io/badge/no_dependencies-none-orange.svg" alt="No Dependencies"></a>
 </p>
 
 ---

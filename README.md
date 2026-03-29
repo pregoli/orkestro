@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="#"><img src="assets/logo-light.svg#gh-light-mode-only" alt="Orkestro" width="360"></a>
-  <a href="#"><img src="assets/logo-dark.svg#gh-dark-mode-only" alt="Orkestro" width="360"></a>
+<img src="assets/logo-light.svg#gh-light-mode-only" alt="Orkestro" width="360"><br>
+<img src="assets/logo-dark.svg#gh-dark-mode-only" alt="Orkestro" width="360">
 </p>
 
 <p align="center">
